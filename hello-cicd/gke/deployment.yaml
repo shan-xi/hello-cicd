@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-cicd-gke
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello-cicd
+  template:
+    metadata:
+      labels:
+        app: hello-cicd
+    spec:
+      containers:
+      - name: hello-app
+        image: us-west1-docker.pkg.dev/go-microservice-370513/hello-cicd-repo/hello-cicd-gke:latest
+        ports:
+        - containerPort: 8081
+          name: http
+        - containerPort: 8082
+          name: grpc
