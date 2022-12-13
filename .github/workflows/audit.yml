@@ -3,8 +3,6 @@ name: Audit
 on:
   push:
     branches: [main]
-  pull_request:
-    branches: [main]
 
 jobs:
 
@@ -22,16 +20,16 @@ jobs:
       run: go mod verify
 
     - name: Build
-      run: go build -v ./...
+      run: go build -v ./hello-cicd/...
 
     - name: Run go vet
-      run: go vet ./...
+      run: go vet ./hello-cicd/...
 
     - name: Install staticcheck
       run: go install honnef.co/go/tools/cmd/staticcheck@latest
 
     - name: Run staticcheck
-      run: staticcheck ./...
+      run: staticcheck ./hello-cicd/...
 
     - name: Install golint
       run: go install golang.org/x/lint/golint@latest

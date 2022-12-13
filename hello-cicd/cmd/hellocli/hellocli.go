@@ -8,12 +8,13 @@ import (
 	"os"
 	"time"
 
-	"github.com/go-kit/kit/log"
+	"github.com/go-kit/log"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 func main() {
-	var useHttp = true
+	var useHTTP = true
 	var useGrpc = false
 	var httpAddr = "35.247.65.245:8081"
 	var grpcAddr = "35.247.65.245:8082"
@@ -23,10 +24,10 @@ func main() {
 		svc helloservice.Service
 		err error
 	)
-	if useHttp {
+	if useHTTP {
 		svc, err = hellotransport.NewHTTPClient(httpAddr, log.NewNopLogger())
 	} else if useGrpc {
-		conn, err := grpc.Dial(grpcAddr, grpc.WithInsecure(), grpc.WithTimeout(time.Second))
+		conn, err := grpc.Dial(grpcAddr, grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithTimeout(time.Second))
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "error: %v", err)
 			os.Exit(1)
@@ -48,5 +49,5 @@ func main() {
 		fmt.Fprintf(os.Stderr, "error: %v\n", err)
 		os.Exit(1)
 	}
-	fmt.Fprintf(os.Stdout, "%d  %d\n", param, v)
+	fmt.Fprintf(os.Stdout, "%v  %v\n", param, v)
 }

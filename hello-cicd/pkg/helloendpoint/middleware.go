@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"github.com/go-kit/kit/endpoint"
-	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/metrics"
+	"github.com/go-kit/log"
 )
 
 func InstrumentingMiddleware(duration metrics.Histogram) endpoint.Middleware {
