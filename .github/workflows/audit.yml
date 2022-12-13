@@ -21,19 +21,23 @@ jobs:
       run: go build -v ./...
 
     - name: Run go vet
-      run: go vet ./hello-cicd/...
+      working-directory: ./hello-cicd
+      run: go vet ./...
 
     - name: Install staticcheck
       run: go install honnef.co/go/tools/cmd/staticcheck@latest
 
     - name: Run staticcheck
-      run: staticcheck ./hello-cicd/...
+      working-directory: ./hello-cicd
+      run: staticcheck .//...
 
     - name: Install golint
       run: go install golang.org/x/lint/golint@latest
 
     - name: Run golint
-      run: golint ./hello-cicd/...
+      working-directory: ./hello-cicd
+      run: golint ./...
 
     - name: Run tests
+      working-directory: ./hello-cicd
       run: go test -race -vet=off ./...
