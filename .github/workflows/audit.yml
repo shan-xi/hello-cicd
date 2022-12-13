@@ -16,16 +16,9 @@ jobs:
       with:
         go-version: 1.17
 
-    - name: Mod init
-      working-directory: ./hello-cicd
-      run: go mod init hello-cicd
-
-    - name: Mod tidy
-      working-directory: ./hello-cicd
-      run: go mod tidy
-
     - name: Build
-      run: go build -v ./hello-cicd/...
+      working-directory: ./hello-cicd
+      run: go build -v ./...
 
     - name: Run go vet
       run: go vet ./hello-cicd/...
