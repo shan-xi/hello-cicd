@@ -6,7 +6,6 @@ import (
 	"hello-cicd/pkg/helloservice"
 	"hello-cicd/pkg/hellotransport"
 	"os"
-	"time"
 
 	"github.com/go-kit/log"
 	"google.golang.org/grpc"
@@ -14,10 +13,10 @@ import (
 )
 
 func main() {
-	var useHTTP = true
-	var useGrpc = false
-	var httpAddr = "35.247.65.245:8081"
-	var grpcAddr = "35.247.65.245:8082"
+	var useHTTP = false
+	var useGrpc = true
+	var httpAddr = "localhost:8081"
+	var grpcAddr = "localhost:8082"
 	var param = "spin"
 
 	var (
@@ -27,7 +26,12 @@ func main() {
 	if useHTTP {
 		svc, err = hellotransport.NewHTTPClient(httpAddr, log.NewNopLogger())
 	} else if useGrpc {
-		conn, err := grpc.Dial(grpcAddr, grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithTimeout(time.Second))
+		ctx := context.TODO()
+		conn, err := grpc.DialContext(
+			ctx,
+			grpcAddr,
+			grpc.WithTransportCredentials(insecure.NewCredentials()),
+		)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "error: %v", err)
 			os.Exit(1)
