@@ -47,7 +47,7 @@ jobs:
       # Initialize the `gcloud` CLI.
       #- gcp-gke/init
       # Update a deployment Docker image.
-      - gcp-gke/rollout-image:
+      - gcp-gke/publish-and-rollout-image:
           cluster: hello-cicd-gke
           deployment: hello-cicd-gke
           container: spin-backend
