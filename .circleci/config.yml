@@ -7,14 +7,14 @@ jobs:
   build:
     docker:
       - image: circleci/golang:latest
-    working_directory: ~/app
+    working-directory: ~/app/hello-cicd
     steps:
       - checkout
       - run:
           name: Run Build and Test
           command: |
-            go build ./hello-cicd/...
-            cd hello-cicd && go test -v
+            go build -v ./...
+            go test -race -vet=off ./...
 
   Build-Push-Image-Docker:
     description: Build and push image to Google Container Registry
