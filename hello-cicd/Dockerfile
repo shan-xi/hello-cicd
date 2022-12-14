@@ -3,12 +3,11 @@ FROM golang:1.19.2-alpine as builder
 
 WORKDIR /app
 
-#COPY ./go.mod ./go.sum ./
-#RUN go mod download
-
 COPY . ./
-RUN go mod init hello-cicd
-RUN go mod tidy
+COPY ./go.mod ./go.sum ./
+RUN go mod download
+
+#RUN go mod init hello-cicd
 
 WORKDIR /app/cmd/hellosvc
 RUN CGO_ENABLED=0 GOOS=linux go build -o /hello-cicd
