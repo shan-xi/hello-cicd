@@ -15,6 +15,12 @@
 
     gcloud container clusters create-auto hello-cicd-gke --region us-west1
 
+    gcloud container clusters list
+
+    gcloud container clusters get-credentials hello-cicd-gke --region us-west1
+
+    kubectl config current-context
+
     kubectl apply -f gke/deployment.yaml
     kubectl apply -f gke/service.yaml
 
@@ -32,4 +38,21 @@
     ```
     go run 'C:\Program Files\Go/src/crypto/tls/generate_cert.go' --host localhost
     use http.ServeTLS
+    ```
+
+    4. circleci
+    ```
+    gcloud auth configure-docker
+
+    docker build -t hello-cicd-gke:v1 .
+
+    docker tag hello-cicd-gke:v1 gcr.io/go-microservice-370513/hello-cicd-gke:v1
+
+    docker push gcr.io/go-microservice-370513/hello-cicd-gke:v1    
+
+    kubectl apply --validate=true --dry-run=true  -f .\hello-cicd\gke\
+
+    kubectl apply --validate=true -f .\hello-cicd\gke\
+
+
     ```
