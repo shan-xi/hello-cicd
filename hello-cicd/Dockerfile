@@ -7,6 +7,7 @@ WORKDIR /app
 #RUN go mod download
 
 COPY . ./
+RUN go mod tidy
 #RUN go mod init hello-cicd
 
 WORKDIR /app/cmd/hellosvc
