@@ -4,7 +4,7 @@ FROM golang:1.19.2-alpine as builder
 WORKDIR /app
 
 COPY . ./
-COPY ./go.mod ./go.sum ./
+#COPY ./go.mod ./go.sum ./
 RUN go mod download
 
 #RUN go mod init hello-cicd
