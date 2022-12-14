@@ -34,6 +34,7 @@ jobs:
             pwd
       - gcr/gcr-auth
       - gcr/build-image:
+          docker-context: ./hello-cicd
           image: hello-cicd-gke
           tag: "v1"
       - gcr/push-image:
