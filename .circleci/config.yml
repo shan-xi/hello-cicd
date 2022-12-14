@@ -26,7 +26,12 @@ jobs:
     working_directory: ~/app/hello-cicd
     steps:
       - checkout
-      - ls
+      - run:
+          name: test
+          command: |
+            ls
+            pwd
+            test -f ./Dockerfile
       - gcr/gcr-auth
       - gcr/build-image:
           image: hello-cicd-gke
