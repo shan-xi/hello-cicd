@@ -1,0 +1,54 @@
+version: 2.1
+orbs:
+  docker: circleci/docker@1.4.0
+  gke: circleci/gcp-gke@1.1.0
+  gcr: circleci/gcp-gcr@0.8.0
+jobs:
+  build:
+    docker:
+      - image: circleci/golang:1.19
+    working_directory: ~/app
+    steps:
+      - checkout
+      - run:
+          name: Run Build and Test
+          command: |
+            go build ./hello-cicd/...
+            cd hello-cicd && go test -v
+
+  Build-Push-Image-Docker:
+    description: Build and push image to Google Container Registry
+    machine: true
+    steps:
+      - checkout
+      - gcr/gcr-auth
+      - gcr/build-image:
+          image: hello-cicd-gke
+          tag: "v1"
+      - gcr/push-image:
+          image: hello-cicd-gke
+          tag: "v1"
+    
+  deploy:
+    description: Deploy application to Google Kubernetes Engine
+    machine: true
+    steps:
+      # Install `gcloud` and `kubectl` if not already installed.
+      - gcp-gke/install
+      # Initialize the `gcloud` CLI.
+      - gcp-gke/init
+      # Update a deployment Docker image.
+      - gcp-gke/rollout-image:
+          deployment: hello-cicd-gke
+          container: spin-backend
+          image: gcr.io/go-microservice-370513/hello-cicd-gke:v1 # change version when updating
+workflows:
+  build_update_deploy:
+    jobs:
+      - build
+      - Build-Push-Image-Docker:
+          requires:
+            - build
+      - deploy:
+          requires:
+            - Build-Push-Image-Docker

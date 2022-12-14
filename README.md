@@ -53,6 +53,6 @@
     kubectl apply --validate=true --dry-run=true  -f .\hello-cicd\gke\
 
     kubectl apply --validate=true -f .\hello-cicd\gke\
-
-
     ```
+## Reference
+https://circleci.com/blog/simplifying-your-ci-cd-build-pipeline-to-gke-with-circleci-orbs/
