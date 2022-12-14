@@ -7,12 +7,13 @@ jobs:
   build:
     docker:
       - image: circleci/golang:latest
-    working_directory: ./hello-cicd
+    working_directory: ~/app
     steps:
       - checkout
       - run:
           name: Run Build and Test
           command: |
+            cd hello-cicd
             go build ./...
             go test -v
 
