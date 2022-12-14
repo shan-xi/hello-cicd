@@ -15,6 +15,7 @@ jobs:
           command: |
             cd hello-cicd
             ls
+            pwd
             cd cmd/hellosvc
             go build .
             go test -v
@@ -25,6 +26,7 @@ jobs:
     working_directory: ~/app/hello-cicd
     steps:
       - checkout
+      - ls
       - gcr/gcr-auth
       - gcr/build-image:
           image: hello-cicd-gke
