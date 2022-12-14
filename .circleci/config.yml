@@ -41,7 +41,7 @@ jobs:
     steps:
       # Install `gcloud` and `kubectl` if not already installed.
       - gcp-gke/install
-      - gke/update-kubeconfig-with-credentials:
+      - gcp-gke/update-kubeconfig-with-credentials:
           cluster: hello-cicd-gke
       # Initialize the `gcloud` CLI.
       #- gcp-gke/init
