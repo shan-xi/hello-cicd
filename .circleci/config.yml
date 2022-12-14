@@ -7,7 +7,7 @@ jobs:
   build:
     docker:
       - image: circleci/golang:latest
-    working_directory: ~/app/hello-cicd
+    working_directory: ./hello-cicd
     steps:
       - checkout
       - run:
