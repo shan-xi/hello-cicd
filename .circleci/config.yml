@@ -1,8 +1,8 @@
 version: 2.1
 orbs:
   docker: circleci/docker@1.4.0
-  gcp-gke: circleci/gcp-gke@0.1.0
-  gcr: circleci/gcp-gcr@0.0.2
+  gcp-gke: circleci/gcp-gke@1.1.0
+  gcr: circleci/gcp-gcr@0.8.0
 jobs:
   build:
     docker:
@@ -13,12 +13,7 @@ jobs:
       - run:
           name: Run Build and Test
           command: |
-            cd hello-cicd
-            ls 
-            cd cmd
-            ls 
-            cd hellosvc
-            ls
+            cd hello-cicd/cmd/hellosvc
             go build .
             go test -v
 
