@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  docker: circleci/docker@1.4.0
+  docker: circleci/docker@2.2.0
   gcp-gke: circleci/gcp-gke@1.4.0
   gcr: circleci/gcp-gcr@0.15.0
 jobs:
@@ -41,6 +41,8 @@ jobs:
     steps:
       # Install `gcloud` and `kubectl` if not already installed.
       - gcp-gke/install
+      - gke/update-kubeconfig-with-credentials:
+          cluster: hello-cicd-gke
       # Initialize the `gcloud` CLI.
       #- gcp-gke/init
       # Update a deployment Docker image.
