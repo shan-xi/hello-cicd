@@ -1,7 +1,7 @@
 version: 2.1
 orbs:
   docker: circleci/docker@2.2.0
-  gcp-gke: titel-media/gcp-gke@0.2.3
+  gcp-gke: circleci/gcp-gke@1.4.0
   gcr: circleci/gcp-gcr@0.15.0
 jobs:
   build:
@@ -47,8 +47,8 @@ jobs:
       # Initialize the `gcloud` CLI.
       #- gcp-gke/init
       # Update a deployment Docker image.
-      - gcp-gke/publish-and-rollout-image:
-          context: hello-cicd-gke
+      - gcp-gke/rollout-image:
+          cluster: hello-cicd-gke
           deployment: hello-cicd-gke
           container: spin-backend
           image: gcr.io/go-microservice-370513/hello-cicd-gke:v1 # change version when updating
