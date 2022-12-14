@@ -7,7 +7,7 @@ import (
 	"errors"
 	"hello-cicd/pkg/helloendpoint"
 	"hello-cicd/pkg/helloservice"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"strings"
@@ -127,7 +127,7 @@ func encodeHTTPGenericRequest(_ context.Context, r *http.Request, request interf
 	if err := json.NewEncoder(&buf).Encode(request); err != nil {
 		return err
 	}
-	r.Body = ioutil.NopCloser(&buf)
+	r.Body = io.NopCloser(&buf)
 	return nil
 }
 
