@@ -10,6 +10,7 @@ COPY . ./
 #RUN go mod init hello-cicd
 
 WORKDIR /app/hello-cicd/cmd/hellosvc
+RUN ls
 RUN CGO_ENABLED=0 GOOS=linux go build -o /hello-cicd
 
 FROM gcr.io/distroless/base-debian11 as final
