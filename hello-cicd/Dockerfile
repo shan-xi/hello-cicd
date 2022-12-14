@@ -9,15 +9,15 @@ WORKDIR /app
 COPY . ./
 #RUN go mod init hello-cicd
 
-WORKDIR /app/cmd/hellosvc
-RUN CGO_ENABLED=0 GOOS=linux go build -o /hello-cicd
+#WORKDIR /app/cmd/hellosvc
+RUN CGO_ENABLED=0 GOOS=linux go build /app/cmd/hellosvc/hellosvc.go
 
 FROM gcr.io/distroless/base-debian11 as final
 WORKDIR /
-COPY --from=builder /hello-cicd /hello-cicd
+COPY --from=builder /hellosvc /hellosvc
 
 EXPOSE 8081
 EXPOSE 8082
 
 USER nonroot:nonroot
-ENTRYPOINT ["/hello-cicd"]
+ENTRYPOINT ["/hellosvc"]
