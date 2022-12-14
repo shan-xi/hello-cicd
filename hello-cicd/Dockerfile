@@ -9,7 +9,8 @@ RUN go mod download
 
 #RUN go mod init hello-cicd
 
-WORKDIR /app/cmd/hellosvc
+WORKDIR /app/hello-cicd/cmd/hellosvc
+
 RUN CGO_ENABLED=0 GOOS=linux go build -o /hello-cicd
 
 FROM gcr.io/distroless/base-debian11 as final
