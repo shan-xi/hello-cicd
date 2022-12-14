@@ -23,7 +23,7 @@ jobs:
   Build-Push-Image-Docker:
     description: Build and push image to Google Container Registry
     machine: true
-    working_directory: ~/app/hello-cicd
+    working_directory: ~/app/hello-cicd/hello-cicd
     steps:
       - checkout
       - run:
