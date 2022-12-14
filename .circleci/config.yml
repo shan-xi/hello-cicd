@@ -40,6 +40,7 @@ jobs:
       #- gcp-gke/init
       # Update a deployment Docker image.
       - gcp-gke/rollout-image:
+          cluster: hello-cicd-gke
           deployment: hello-cicd-gke
           container: spin-backend
           image: gcr.io/go-microservice-370513/hello-cicd-gke:v1 # change version when updating
