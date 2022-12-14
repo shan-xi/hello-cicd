@@ -45,7 +45,7 @@ jobs:
       - gcp-gke/update-kubeconfig-with-credentials:
           cluster: hello-cicd-gke
       # Initialize the `gcloud` CLI.
-      - gcp-gke/init
+      #- gcp-gke/init
       # Update a deployment Docker image.
       - gcp-gke/rollout-image:
           cluster: hello-cicd-gke
