@@ -7,7 +7,7 @@ jobs:
   build:
     docker:
       - image: circleci/golang:latest
-    working_directory: /app
+    working_directory: ~/app
     steps:
       - checkout
       - run:
@@ -23,7 +23,7 @@ jobs:
   Build-Push-Image-Docker:
     description: Build and push image to Google Container Registry
     machine: true
-    working_directory: /app
+    working_directory: ~/app
     steps:
       - checkout
       - gcr/gcr-auth
