@@ -65,6 +65,8 @@ workflows:
       #       - Build-Push-Image-Docker
 
       - gcp-gke/publish-and-rollout-image:
+          requires:
+            - Build-Push-Image-Docker
           cluster: hello-cicd-gke
           container: spin-backend
           deployment: hello-cicd-gke
