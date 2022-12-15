@@ -9,7 +9,7 @@ jobs:
 #       - image: circleci/golang:latest
 #     working_directory: ~/app
 #     steps:
-# #       - checkout
+# #     - checkout
 #       - run:
 #           name: Run Build and Test
 #           command: |
@@ -39,12 +39,15 @@ jobs:
     description: Deploy application to Google Kubernetes Engine
     machine: true
     steps:
+      - checkout
       - run:
-          gcloud components install gke-gcloud-auth-plugin
-          gke-gcloud-auth-plugin --version 
-          export USE_GKE_GCLOUD_AUTH_PLUGIN=True
-          gcloud components update
-          gcloud container clusters get-credentials hello-cicd-gke
+          name: env
+          command: |
+              gcloud components install gke-gcloud-auth-plugin
+              gke-gcloud-auth-plugin --version 
+              export USE_GKE_GCLOUD_AUTH_PLUGIN=True
+              gcloud components update
+              gcloud container clusters get-credentials hello-cicd-gke
       - gcr/gcr-auth
       # Install `gcloud` and `kubectl` if not already installed.
       - gcp-gke/install
