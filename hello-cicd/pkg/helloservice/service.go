@@ -38,6 +38,6 @@ func (s basicService) SayHello(_ context.Context, a string) (string, error) {
 		}
 		return fmt.Sprintf("Hello %v", a), nil
 	} else {
-		return "Hello World", nil
+		return "Hello World, you success!", nil
 	}
 }
