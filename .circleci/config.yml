@@ -3,16 +3,17 @@ orbs:
   docker: circleci/docker@2.2.0
   gcp-gke: circleci/gcp-gke@1.4.0
   gcr: circleci/gcp-gcr@0.15.0
-# jobs:
-#   build:
-#     docker:
-#       - image: circleci/golang:latest
-#     working_directory: ~/app
-#     steps:
+jobs:
+  build:
+    docker:
+      - image: circleci/golang:latest
+    working_directory: ~/app
+    steps:
 #       - checkout
-#       - run:
-#           name: Run Build and Test
-#           command: |
+      - run:
+          name: Run Build and Test
+          command: |
+            export USE_GKE_GCLOUD_AUTH_PLUGIN=True
 #             cd hello-cicd
 #             ls
 #             pwd
@@ -57,7 +58,7 @@ orbs:
 workflows:
   build_update_deploy:
     jobs:
-      # - build
+      - build
       # - Build-Push-Image-Docker:
       #     requires:
       #       - build
@@ -67,8 +68,8 @@ workflows:
 
       # - deploy
       - gcp-gke/publish-and-rollout-image:
-          # requires:
-          #   - build
+          requires:
+            - build
           cluster: hello-cicd-gke
           container: spin-backend
           deployment: hello-cicd-gke
