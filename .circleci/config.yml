@@ -4,16 +4,15 @@ orbs:
   gcp-gke: circleci/gcp-gke@1.4.0
   gcr: circleci/gcp-gcr@0.15.0
 jobs:
-  build:
-    docker:
-      - image: circleci/golang:latest
-    working_directory: ~/app
-    steps:
-#       - checkout
-      - run:
-          name: Run Build and Test
-          command: |
-            export USE_GKE_GCLOUD_AUTH_PLUGIN=True
+#   build:
+#     docker:
+#       - image: circleci/golang:latest
+#     working_directory: ~/app
+#     steps:
+# #       - checkout
+#       - run:
+#           name: Run Build and Test
+#           command: |
 #             cd hello-cicd
 #             ls
 #             pwd
@@ -36,10 +35,12 @@ jobs:
   #         image: hello-cicd-gke
   #         tag: "v1"
     
-  # deploy:
-  #   description: Deploy application to Google Kubernetes Engine
-  #   machine: true
-  #   steps:
+  deploy:
+    description: Deploy application to Google Kubernetes Engine
+    machine: true
+    environment:
+      USE_GKE_GCLOUD_AUTH_PLUGIN: "True"
+    steps:
       # - gcr/gcr-auth-plugin
       # # Install `gcloud` and `kubectl` if not already installed.
       # - gcp-gke/install
@@ -53,7 +54,15 @@ jobs:
       #     deployment: hello-cicd-gke
       #     container: spin-backend
       #     image: gcr.io/go-microservice-370513/hello-cicd-gke:v1 # change version when updating
-
+      - gcp-gke/publish-and-rollout-image:
+          # requires:
+          #   - build
+          cluster: hello-cicd-gke
+          container: spin-backend
+          deployment: hello-cicd-gke
+          dockerfile-dir: ./hello-cicd
+          image: hello-cicd-gke
+          tag: "v1"
 
 workflows:
   build_update_deploy:
@@ -67,6 +76,7 @@ workflows:
       #       - Build-Push-Image-Docker
 
       # - deploy
+
       - gcp-gke/publish-and-rollout-image:
           requires:
             - build
