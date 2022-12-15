@@ -60,9 +60,7 @@ jobs:
           cluster: hello-cicd-gke
           deployment: hello-cicd-gke
           container: spin-backend
-          # image: gcr.io/go-microservice-370513/hello-cicd-gke:v1 # change version when updating
-          image: hello-cicd-gke
-          tag: "v1"
+          image: gcr.io/go-microservice-370513/hello-cicd-gke:v1 # change version when updating
 
 workflows:
   # build_update_deploy:
