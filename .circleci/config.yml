@@ -30,10 +30,10 @@ jobs:
       - gcr/build-image:
           path: ./hello-cicd
           image: hello-cicd-gke
-          tag: "v2"
+          tag: "v3"
       - gcr/push-image:
           image: hello-cicd-gke
-          tag: "v2"
+          tag: "v3"
     
   deploy:
     description: Deploy application to Google Kubernetes Engine
@@ -60,7 +60,7 @@ jobs:
           cluster: hello-cicd-gke
           deployment: hello-cicd-gke-deployment
           container: hello-app
-          image: gcr.io/go-microservice-370513/hello-cicd-gke:v2 # change version when updating
+          image: gcr.io/go-microservice-370513/hello-cicd-gke:v3 # change version when updating
 
 workflows:
   # build_update_deploy:
