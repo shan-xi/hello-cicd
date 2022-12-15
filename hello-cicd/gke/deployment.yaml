@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: hello-app
-        image: gcr.io/go-microservice-370513/hello-cicd-gke:v4
+        image: gcr.io/go-microservice-370513/hello-cicd-gke:v5
         ports:
         - containerPort: 8081
           name: http
