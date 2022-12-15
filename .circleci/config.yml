@@ -70,4 +70,4 @@ workflows:
           cluster: hello-cicd-gke
           container: spin-backend
           deployment: hello-cicd-gke
-          image: hello-cicd-gke:v1 # change version when updating
+          image: hello-cicd-gke
