@@ -9,7 +9,7 @@ RUN go mod download
 
 #RUN go mod init hello-cicd
 
-WORKDIR /app/hello-cicd/cmd/hellosvc
+WORKDIR /app/cmd/hellosvc
 
 RUN CGO_ENABLED=0 GOOS=linux go build -o /hello-cicd
 
