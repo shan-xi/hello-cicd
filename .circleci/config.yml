@@ -60,9 +60,9 @@ workflows:
       - Build-Push-Image-Docker:
           requires:
             - build
-      - deploy:
-          requires:
-            - Build-Push-Image-Docker
+      # - deploy:
+      #     requires:
+      #       - Build-Push-Image-Docker
 
       - gke/publish-and-rollout-image:
           cluster: hello-cicd-gke
