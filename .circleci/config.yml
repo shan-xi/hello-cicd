@@ -70,7 +70,6 @@ workflows:
           cluster: hello-cicd-gke
           container: spin-backend
           deployment: hello-cicd-gke
-          docker-context: ~/app
           dockerfile-dir: ./hello-cicd
           image: hello-cicd-gke
           tag: "v1"
