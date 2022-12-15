@@ -67,7 +67,7 @@ jobs:
 workflows:
   build_update_deploy:
     jobs:
-      - build
+      # - build
       # - Build-Push-Image-Docker:
       #     requires:
       #       - build
@@ -75,14 +75,13 @@ workflows:
       #     requires:
       #       - Build-Push-Image-Docker
 
-      # - deploy
-
-      - gcp-gke/publish-and-rollout-image:
-          requires:
-            - build
-          cluster: hello-cicd-gke
-          container: spin-backend
-          deployment: hello-cicd-gke
-          dockerfile-dir: ./hello-cicd
-          image: hello-cicd-gke
-          tag: "v1"
+      - deploy
+      # - gcp-gke/publish-and-rollout-image:
+      #     requires:
+      #       - build
+      #     cluster: hello-cicd-gke
+      #     container: spin-backend
+      #     deployment: hello-cicd-gke
+      #     dockerfile-dir: ./hello-cicd
+      #     image: hello-cicd-gke
+      #     tag: "v1"
