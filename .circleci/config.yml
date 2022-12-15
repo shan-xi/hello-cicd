@@ -3,7 +3,6 @@ orbs:
   docker: circleci/docker@2.2.0
   gcp-gke: circleci/gcp-gke@1.4.0
   gcr: circleci/gcp-gcr@0.15.0
-# jobs:
 #   build:
 #     docker:
 #       - image: circleci/golang:latest
@@ -55,6 +54,7 @@ orbs:
 
 workflows:
   build_update_deploy:
+    
     jobs:
       # - build
       # - Build-Push-Image-Docker:
@@ -65,10 +65,13 @@ workflows:
       #       - Build-Push-Image-Docker
 
       # - deploy
-      - gcp-gke/update-kubeconfig-with-credentials:
-          cluster: hello-cicd-gke
-          install-kubectl: True
-          perform-login: True
+      - steps:
+          run:
+            gcloud components install gke-gcloud-auth-plugin
+            gke-gcloud-auth-plugin --version 
+            export USE_GKE_GCLOUD_AUTH_PLUGIN=True
+            gcloud components update
+            gcloud container clusters get-credentials hello-cicd-gke
       - gcp-gke/publish-and-rollout-image:
           # requires:
           #   - build
