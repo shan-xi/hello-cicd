@@ -59,7 +59,7 @@ jobs:
       - gcp-gke/rollout-image:
           cluster: hello-cicd-gke
           deployment: hello-cicd-gke-deployment
-          container: spin-backend
+          container: hello-app
           image: gcr.io/go-microservice-370513/hello-cicd-gke:v1 # change version when updating
 
 workflows:
