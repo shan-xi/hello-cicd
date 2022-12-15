@@ -43,11 +43,9 @@ jobs:
       - run:
           name: env
           command: |
-              gcloud components install gke-gcloud-auth-plugin
-              gke-gcloud-auth-plugin --version 
+              gcloud components install gke-gcloud-auth-plugin --quiet
               export USE_GKE_GCLOUD_AUTH_PLUGIN=True
-              gcloud components update
-              gcloud container clusters get-credentials hello-cicd-gke
+              gcloud components update --quiet
       - gcr/gcr-auth
       # Install `gcloud` and `kubectl` if not already installed.
       - gcp-gke/install
