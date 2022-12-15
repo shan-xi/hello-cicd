@@ -52,14 +52,6 @@ jobs:
           #deployment: hello-cicd-gke
           #container: spin-backend
           #image: gcr.io/go-microservice-370513/hello-cicd-gke:v1 # change version when updating
-    deploy:
-      description: Deploy application to Google Kubernetes Engine
-      steps:
-        - gke/publish-and-rollout-image:
-          cluster: hello-cicd-gke
-          deployment: hello-cicd-gke
-          container: spin-backend
-          image: gcr.io/go-microservice-370513/hello-cicd-gke:v1 # change version when updating
 
 workflows:
   build_update_deploy:
@@ -71,3 +63,9 @@ workflows:
       - deploy:
           requires:
             - Build-Push-Image-Docker
+
+      - gke/publish-and-rollout-image:
+          cluster: hello-cicd-gke
+          container: spin-backend
+          deployment: hello-cicd-gke
+          image: gcr.io/go-microservice-370513/hello-cicd-gke:v1 # change version when updating
