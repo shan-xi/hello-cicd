@@ -3,6 +3,7 @@ orbs:
   gcp-gke: circleci/gcp-gke@1.4.0
   gcr: circleci/gcp-gcr@0.15.0
 version: 2.1
+jobs:
 #   build:
 #     docker:
 #       - image: circleci/golang:latest
@@ -19,65 +20,62 @@ version: 2.1
 #             go build .
 #             go test -v
 
-  # Build-Push-Image-Docker:
-  #   description: Build and push image to Google Container Registry
-  #   machine: true
-  #   working_directory: ~/app
-  #   steps:
-  #     - checkout
-  #     - gcr/gcr-auth
-  #     - gcr/build-image:
-  #         path: ./hello-cicd
-  #         image: hello-cicd-gke
-  #         tag: "v1"
-  #     - gcr/push-image:
-  #         image: hello-cicd-gke
-  #         tag: "v1"
+  Build-Push-Image-Docker:
+    description: Build and push image to Google Container Registry
+    machine: true
+    working_directory: ~/app
+    steps:
+      - checkout
+      - gcr/gcr-auth
+      - gcr/build-image:
+          path: ./hello-cicd
+          image: hello-cicd-gke
+          tag: "v1"
+      - gcr/push-image:
+          image: hello-cicd-gke
+          tag: "v1"
     
-  # deploy:
-  #   description: Deploy application to Google Kubernetes Engine
-  #   machine: true
-  #   steps:
-      # - gcr/gcr-auth-plugin
-      # # Install `gcloud` and `kubectl` if not already installed.
-      # - gcp-gke/install
-      # - gcp-gke/update-kubeconfig-with-credentials:
-      #     cluster: hello-cicd-gke
-      # # Initialize the `gcloud` CLI.
+  deploy:
+    description: Deploy application to Google Kubernetes Engine
+    machine: true
+    steps:
+      - run:
+          gcloud components install gke-gcloud-auth-plugin
+          gke-gcloud-auth-plugin --version 
+          export USE_GKE_GCLOUD_AUTH_PLUGIN=True
+          gcloud components update
+          gcloud container clusters get-credentials hello-cicd-gke
+      - gcr/gcr-auth
+      # Install `gcloud` and `kubectl` if not already installed.
+      - gcp-gke/install
+      - gcp-gke/update-kubeconfig-with-credentials:
+          cluster: hello-cicd-gke
+      # Initialize the `gcloud` CLI.
       # - gcp-gke/init
-      # # Update a deployment Docker image.
-      # - gcp-gke/rollout-image:
-      #     cluster: hello-cicd-gke
-      #     deployment: hello-cicd-gke
-      #     container: spin-backend
-      #     image: gcr.io/go-microservice-370513/hello-cicd-gke:v1 # change version when updating
+      # Update a deployment Docker image.
+      - gcp-gke/rollout-image:
+          cluster: hello-cicd-gke
+          deployment: hello-cicd-gke
+          container: spin-backend
+          image: gcr.io/go-microservice-370513/hello-cicd-gke:v1 # change version when updating
 
 workflows:
   # build_update_deploy:
   main:
     jobs:
       # - build
-      # - Build-Push-Image-Docker:
+      - Build-Push-Image-Docker
       #     requires:
       #       - build
-      # - deploy:
-      #     requires:
-      #       - Build-Push-Image-Docker
-
-      # - deploy
-      - steps:
-          run:
-            gcloud components install gke-gcloud-auth-plugin
-            gke-gcloud-auth-plugin --version 
-            export USE_GKE_GCLOUD_AUTH_PLUGIN=True
-            gcloud components update
-            gcloud container clusters get-credentials hello-cicd-gke
-      - gcp-gke/publish-and-rollout-image:
-          # requires:
-          #   - build
-          cluster: hello-cicd-gke
-          container: spin-backend
-          deployment: hello-cicd-gke
-          dockerfile-dir: ./hello-cicd
-          image: hello-cicd-gke
-          tag: "v1"
+      - deploy:
+          requires:
+            - Build-Push-Image-Docker
+      # - gcp-gke/publish-and-rollout-image:
+      #     # requires:
+      #     #   - build
+      #     cluster: hello-cicd-gke
+      #     container: spin-backend
+      #     deployment: hello-cicd-gke
+      #     dockerfile-dir: ./hello-cicd
+      #     image: hello-cicd-gke
+      #     tag: "v1"
