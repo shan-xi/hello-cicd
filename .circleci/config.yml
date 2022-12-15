@@ -70,4 +70,6 @@ workflows:
           cluster: hello-cicd-gke
           container: spin-backend
           deployment: hello-cicd-gke
+          path: ./hello-cicd
           image: hello-cicd-gke
+          tag: "v1"
