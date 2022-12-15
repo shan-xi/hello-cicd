@@ -73,4 +73,3 @@ workflows:
           dockerfile-dir: ./hello-cicd
           image: hello-cicd-gke
           tag: "v1"
-          google-compute-region: "us-west1"
