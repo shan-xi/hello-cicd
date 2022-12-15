@@ -1,6 +1,6 @@
 ARG GO_VERSION=1.19
 FROM golang:1.19.2-alpine as builder
-
+ENV USE_GKE_GCLOUD_AUTH_PLUGIN=True
 WORKDIR /app
 
 COPY . ./
