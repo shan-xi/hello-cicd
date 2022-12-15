@@ -1,27 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hello-cicd-gke
+  name: hello-cicd-gke-deployment
   labels:
-    app: simple-backend
+    app: hello-app
 spec:
+  replicas: 1
   selector:
     matchLabels:
-      app: hello-cicd
-      tier: backend
-  strategy:
-    type: Recreate
+      app: hello-app
   template:
     metadata:
       labels:
-        app: hello-cicd
-        tier: backend
+        app: hello-app
     spec:
       containers:
-        - image: gcr.io/go-microservice-370513/hello-cicd-gke:v1
-          name: hello-cicd
-          ports:
-            - containerPort: 8081
-              name: http
-            - containerPort: 8082
-              name: grpc
+      - name: hello-app
+        image: us-west1-docker.pkg.dev/go-microservice-370513/hello-cicd-repo/hello-cicd-gke:latest
+        ports:
+        - containerPort: 8081
+          name: http
+        - containerPort: 8082
+          name: grpc

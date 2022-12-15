@@ -1,6 +1,6 @@
 ARG GO_VERSION=1.19
 FROM golang:1.19.2-alpine as builder
-ENV USE_GKE_GCLOUD_AUTH_PLUGIN=True
+
 WORKDIR /app
 
 COPY . ./
@@ -9,7 +9,7 @@ RUN go mod download
 
 #RUN go mod init hello-cicd
 
-WORKDIR /app/hello-cicd/cmd/hellosvc
+WORKDIR /app/cmd/hellosvc
 
 RUN CGO_ENABLED=0 GOOS=linux go build -o /hello-cicd
 
