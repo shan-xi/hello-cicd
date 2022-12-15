@@ -1,8 +1,7 @@
 version: 2.1
 orbs:
   docker: circleci/docker@2.2.0
-  # gcp-gke: circleci/gcp-gke@1.4.0
-  gcp-gke: reveal-co/gcp@0.3.2
+  gcp-gke: circleci/gcp-gke@1.4.0
   gcr: circleci/gcp-gcr@0.15.0
 # jobs:
 #   build:
@@ -66,10 +65,11 @@ workflows:
       #       - Build-Push-Image-Docker
 
       # - deploy
-      - gcp-gke/install-gke-gcloud-auth-plugin:
-          image: hello-cicd-gke
-          tag: "v1"
-      - gcp-gke/build-and-push-docker-image:
+      - gcp-gke/update-kubeconfig-with-credentials:
+          cluster: hello-cicd-gke
+          install-kubectl: True
+          perform-login: True
+      - gcp-gke/publish-and-rollout-image:
           # requires:
           #   - build
           cluster: hello-cicd-gke
