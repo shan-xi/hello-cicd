@@ -1,8 +1,8 @@
-version: 2.1
 orbs:
   docker: circleci/docker@2.2.0
   gcp-gke: circleci/gcp-gke@1.4.0
   gcr: circleci/gcp-gcr@0.15.0
+version: 2.1
 #   build:
 #     docker:
 #       - image: circleci/golang:latest
@@ -53,8 +53,8 @@ orbs:
       #     image: gcr.io/go-microservice-370513/hello-cicd-gke:v1 # change version when updating
 
 workflows:
-  build_update_deploy:
-    
+  # build_update_deploy:
+  main:
     jobs:
       # - build
       # - Build-Push-Image-Docker:
