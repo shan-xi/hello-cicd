@@ -13,7 +13,7 @@
     gcloud artifacts repositories create hello-cicd-repo --project=go-microservice-370513 --repository-format=docker --location=us-west1 --description="Hello CICD repository"
     gcloud builds submit --tag us-west1-docker.pkg.dev/go-microservice-370513/hello-cicd-repo/hello-cicd-gke .
 
-    gcloud container clusters create-auto hello-cicd-gke --region us-west1
+    gcloud container clusters create-auto hello-cicd-gke --region us-west1 
 
     gcloud container clusters list
 

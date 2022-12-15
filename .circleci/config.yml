@@ -3,37 +3,37 @@ orbs:
   docker: circleci/docker@2.2.0
   gcp-gke: circleci/gcp-gke@1.4.0
   gcr: circleci/gcp-gcr@0.15.0
-jobs:
-  build:
-    docker:
-      - image: circleci/golang:latest
-    working_directory: ~/app
-    steps:
-      - checkout
-      - run:
-          name: Run Build and Test
-          command: |
-            cd hello-cicd
-            ls
-            pwd
-            cd cmd/hellosvc
-            go build .
-            go test -v
+# jobs:
+#   build:
+#     docker:
+#       - image: circleci/golang:latest
+#     working_directory: ~/app
+#     steps:
+#       - checkout
+#       - run:
+#           name: Run Build and Test
+#           command: |
+#             cd hello-cicd
+#             ls
+#             pwd
+#             cd cmd/hellosvc
+#             go build .
+#             go test -v
 
-  Build-Push-Image-Docker:
-    description: Build and push image to Google Container Registry
-    machine: true
-    working_directory: ~/app
-    steps:
-      - checkout
-      - gcr/gcr-auth
-      - gcr/build-image:
-          path: ./hello-cicd
-          image: hello-cicd-gke
-          tag: "v1"
-      - gcr/push-image:
-          image: hello-cicd-gke
-          tag: "v1"
+  # Build-Push-Image-Docker:
+  #   description: Build and push image to Google Container Registry
+  #   machine: true
+  #   working_directory: ~/app
+  #   steps:
+  #     - checkout
+  #     - gcr/gcr-auth
+  #     - gcr/build-image:
+  #         path: ./hello-cicd
+  #         image: hello-cicd-gke
+  #         tag: "v1"
+  #     - gcr/push-image:
+  #         image: hello-cicd-gke
+  #         tag: "v1"
     
   #deploy:
     #description: Deploy application to Google Kubernetes Engine
@@ -56,17 +56,17 @@ jobs:
 workflows:
   build_update_deploy:
     jobs:
-      - build
-      - Build-Push-Image-Docker:
-          requires:
-            - build
+      # - build
+      # - Build-Push-Image-Docker:
+      #     requires:
+      #       - build
       # - deploy:
       #     requires:
       #       - Build-Push-Image-Docker
 
       - gcp-gke/publish-and-rollout-image:
-          requires:
-            - Build-Push-Image-Docker
+          # requires:
+          #   - build
           cluster: hello-cicd-gke
           container: spin-backend
           deployment: hello-cicd-gke
