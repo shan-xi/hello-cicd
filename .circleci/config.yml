@@ -52,6 +52,20 @@ orbs:
           #deployment: hello-cicd-gke
           #container: spin-backend
           #image: gcr.io/go-microservice-370513/hello-cicd-gke:v1 # change version when updating
+  deploy:
+    steps:
+      - run:
+        command: |
+          export USE_GKE_GCLOUD_AUTH_PLUGIN=True
+      - gcp-gke/publish-and-rollout-image:
+          # requires:
+          #   - build
+          cluster: hello-cicd-gke
+          container: spin-backend
+          deployment: hello-cicd-gke
+          dockerfile-dir: ./hello-cicd
+          image: hello-cicd-gke
+          tag: "v1"
 
 workflows:
   build_update_deploy:
@@ -64,12 +78,13 @@ workflows:
       #     requires:
       #       - Build-Push-Image-Docker
 
-      - gcp-gke/publish-and-rollout-image:
-          # requires:
-          #   - build
-          cluster: hello-cicd-gke
-          container: spin-backend
-          deployment: hello-cicd-gke
-          dockerfile-dir: ./hello-cicd
-          image: hello-cicd-gke
-          tag: "v1"
+      - deploy
+      # - gcp-gke/publish-and-rollout-image:
+      #     # requires:
+      #     #   - build
+      #     cluster: hello-cicd-gke
+      #     container: spin-backend
+      #     deployment: hello-cicd-gke
+      #     dockerfile-dir: ./hello-cicd
+      #     image: hello-cicd-gke
+      #     tag: "v1"
