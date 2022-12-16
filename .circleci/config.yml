@@ -5,6 +5,7 @@ orbs:
 version: 2.1
 jobs:
   build:
+    description: Build and Test
     docker:
       - image: circleci/golang:latest
     working_directory: ~/app
@@ -27,10 +28,10 @@ jobs:
       - gcr/build-image:
           path: .
           image: hello-cicd-gke
-          tag: "v1"
+          tag: "v2"
       - gcr/push-image:
           image: hello-cicd-gke
-          tag: "v1"
+          tag: "v2"
     
   deploy:
     description: Deploy application to Google Kubernetes Engine
@@ -47,7 +48,6 @@ jobs:
               gcloud components update --quiet
               gcloud components install gke-gcloud-auth-plugin --quiet
               export USE_GKE_GCLOUD_AUTH_PLUGIN=True
-              echo $USE_GKE_GCLOUD_AUTH_PLUGIN
       - gcp-gke/update-kubeconfig-with-credentials:
           cluster: hello-cicd-gke
       # Initialize the `gcloud` CLI.
@@ -58,7 +58,7 @@ jobs:
           deployment: hello-cicd-gke-deployment
           container: hello-app
           image: gcr.io/go-microservice-370513/hello-cicd-gke 
-          tag: "v1" # change version when updating
+          tag: "v2" # change version when updating
 workflows:
   # build_update_deploy:
   main:
