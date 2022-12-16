@@ -25,7 +25,7 @@ jobs:
       - checkout
       - gcr/gcr-auth
       - gcr/build-image:
-          path: ./hello-cicd
+          path: .
           image: hello-cicd-gke
           tag: "v1"
       - gcr/push-image:
