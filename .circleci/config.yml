@@ -28,19 +28,17 @@ jobs:
       - gcr/build-image:
           path: .
           image: hello-cicd-gke
-          tag: "v2"
+          tag: "v3"
       - gcr/push-image:
           image: hello-cicd-gke
-          tag: "v2"
+          tag: "v3"
     
   deploy:
     description: Deploy application to Google Kubernetes Engine
     machine: true
     steps:
       - gcr/gcr-auth
-      # Install `gcloud` and `kubectl` if not already installed.
       - gcp-gke/install
-
       - checkout
       - run:
           name: env
@@ -50,18 +48,14 @@ jobs:
               export USE_GKE_GCLOUD_AUTH_PLUGIN=True
       - gcp-gke/update-kubeconfig-with-credentials:
           cluster: hello-cicd-gke
-      # Initialize the `gcloud` CLI.
-      # - gcp-gke/init
-      # Update a deployment Docker image.
       - gcp-gke/rollout-image:
           cluster: hello-cicd-gke
           deployment: hello-cicd-gke-deployment
           container: hello-app
           image: gcr.io/go-microservice-370513/hello-cicd-gke 
-          tag: "v2" # change version when updating
+          tag: "v3"
 workflows:
-  # build_update_deploy:
-  main:
+  build_update_deploy:
     jobs:
       - build
       - Build-Push-Image-Docker:
@@ -70,12 +64,3 @@ workflows:
       - deploy:
           requires:
             - Build-Push-Image-Docker
-      # - gcp-gke/publish-and-rollout-image:
-      #     # requires:
-      #     #   - build
-      #     cluster: hello-cicd-gke
-      #     container: spin-backend
-      #     deployment: hello-cicd-gke
-      #     dockerfile-dir: ./hello-cicd
-      #     image: hello-cicd-gke
-      #     tag: "v1"

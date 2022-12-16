@@ -61,3 +61,5 @@
 
 [Simplifying your CI/CD build pipeline to GKE with CircleCI orbs](https://circleci.com/blog/simplifying-your-ci-cd-build-pipeline-to-gke-with-circleci-orbs/)
 
+[Go-kit example with all-features](https://github.com/go-kit/examples/tree/master/addsvc)
+

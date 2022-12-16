@@ -8,10 +8,12 @@ import (
 	"github.com/go-kit/log"
 )
 
+// Service describes a service that say hello to someone.
 type Service interface {
 	SayHello(ctx context.Context, a string) (string, error)
 }
 
+// New returns a basic Service with all of the expected middlewares wired in.
 func New(logger log.Logger) Service {
 	var svc Service
 	{
@@ -22,15 +24,18 @@ func New(logger log.Logger) Service {
 }
 
 var (
+	// ErrNameTooLong is an arbitrary business rule for the SayHello method.
 	ErrNameTooLong = errors.New("name can't over than 10 bytes")
 )
 
+// NewBasicService returns a naïve, stateless implementation of Service.
 func NewBasicService() Service {
 	return basicService{}
 }
 
 type basicService struct{}
 
+// SayHello impelemtns Service
 func (s basicService) SayHello(_ context.Context, a string) (string, error) {
 	if a != "" {
 		if len(a) > 10 {

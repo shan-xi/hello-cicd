@@ -7,33 +7,34 @@ import (
 
 	"golang.org/x/time/rate"
 
-	stdopentracing "github.com/opentracing/opentracing-go"
-	stdzipkin "github.com/openzipkin/zipkin-go"
+	// stdopentracing "github.com/opentracing/opentracing-go"
+	// stdzipkin "github.com/openzipkin/zipkin-go"
 	"github.com/sony/gobreaker"
 
 	"github.com/go-kit/kit/circuitbreaker"
 	"github.com/go-kit/kit/endpoint"
 	"github.com/go-kit/kit/metrics"
 	"github.com/go-kit/kit/ratelimit"
-	"github.com/go-kit/kit/tracing/opentracing"
-	"github.com/go-kit/kit/tracing/zipkin"
 	"github.com/go-kit/log"
 )
 
+// Set collects all of the endpoints that compose an hello service. It's meant to
+// be used as a helper struct, to collect all of the endpoints into a single
+// parameter.
 type Set struct {
 	SayHelloEndpoint endpoint.Endpoint
 }
 
-func New(svc helloservice.Service, logger log.Logger, duration metrics.Histogram, otTracer stdopentracing.Tracer, zipkinTracer *stdzipkin.Tracer) Set {
+// New returns a Set that wraps the provided server, and wires in all of the
+// expected endpoint middlewares via the various parameters.
+func New(svc helloservice.Service, logger log.Logger, duration metrics.Histogram) Set {
 	var sayHelloEndpoint endpoint.Endpoint
 	{
 		sayHelloEndpoint = MakeSayHelloEndpoint(svc)
+		// SayHello is limited to 1 request per second with burst of 1 request.
+		// Note, rate is defined as a time interval between requests.
 		sayHelloEndpoint = ratelimit.NewErroringLimiter(rate.NewLimiter(rate.Every(time.Second), 1))(sayHelloEndpoint)
 		sayHelloEndpoint = circuitbreaker.Gobreaker(gobreaker.NewCircuitBreaker(gobreaker.Settings{}))(sayHelloEndpoint)
-		sayHelloEndpoint = opentracing.TraceServer(otTracer, "SayHello")(sayHelloEndpoint)
-		if zipkinTracer != nil {
-			sayHelloEndpoint = zipkin.TraceEndpoint(zipkinTracer, "SayHello")(sayHelloEndpoint)
-		}
 		sayHelloEndpoint = LoggingMiddleware(log.With(logger, "method", "SayHello"))(sayHelloEndpoint)
 		sayHelloEndpoint = InstrumentingMiddleware(duration.With("method", "SayHello"))(sayHelloEndpoint)
 	}
@@ -42,6 +43,8 @@ func New(svc helloservice.Service, logger log.Logger, duration metrics.Histogram
 	}
 }
 
+// SayHello implements the service interface, so Set may be used as a service.
+// This is primarily useful in the context of a client library.
 func (s Set) SayHello(ctx context.Context, a string) (string, error) {
 	resp, err := s.SayHelloEndpoint(ctx, SayHelloRequest{A: a})
 	if err != nil {
@@ -51,6 +54,7 @@ func (s Set) SayHello(ctx context.Context, a string) (string, error) {
 	return response.V, response.Err
 }
 
+// MakeSayHelloEndpoint constructs a SayHello endpoint wrapping the service.
 func MakeSayHelloEndpoint(s helloservice.Service) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (response interface{}, err error) {
 		req := request.(SayHelloRequest)
@@ -59,17 +63,21 @@ func MakeSayHelloEndpoint(s helloservice.Service) endpoint.Endpoint {
 	}
 }
 
+// compile time assertions for our response types implementing endpoint.Failer
 var (
 	_ endpoint.Failer = SayHelloResponse{}
 )
 
+// SayHelloRequest collects the request parameters for the SayHello method.
 type SayHelloRequest struct {
 	A string
 }
 
+// SayHelloResponse collects the response values for the SayHello method.
 type SayHelloResponse struct {
 	V   string `json:"v"`
 	Err error  `json:"-"` // should be intercepted by Failed/errorEncoder
 }
 
+// Failed implements Failer.
 func (r SayHelloResponse) Failed() error { return r.Err }
