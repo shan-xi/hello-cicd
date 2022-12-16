@@ -13,10 +13,7 @@ jobs:
       - run:
           name: Run Build and Test
           command: |
-            cd hello-cicd
-            ls
-            pwd
-            cd cmd/hellosvc
+            cd hello-cicd/cmd/hellosvc
             go build .
             go test -v
 
@@ -30,10 +27,10 @@ jobs:
       - gcr/build-image:
           path: ./hello-cicd
           image: hello-cicd-gke
-          tag: "v5"
+          tag: "v1"
       - gcr/push-image:
           image: hello-cicd-gke
-          tag: "v5"
+          tag: "v1"
     
   deploy:
     description: Deploy application to Google Kubernetes Engine
@@ -61,7 +58,7 @@ jobs:
           deployment: hello-cicd-gke-deployment
           container: hello-app
           image: gcr.io/go-microservice-370513/hello-cicd-gke 
-          tag: "v5" # change version when updating
+          tag: "v1" # change version when updating
 workflows:
   # build_update_deploy:
   main:

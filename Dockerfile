@@ -1,11 +1,11 @@
 ARG GO_VERSION=1.19
 FROM golang:1.19.2-alpine as builder
 
-WORKDIR /app
+WORKDIR /app/hello-cicd
 
-COPY . ./
+COPY ./hello-cicd ./
 #COPY ./go.mod ./go.sum ./
-RUN go mod download
+# RUN go mod download
 
 #RUN go mod init hello-cicd
 

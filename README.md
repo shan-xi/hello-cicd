@@ -50,9 +50,14 @@
 
     docker push gcr.io/go-microservice-370513/hello-cicd-gke:v1    
 
-    kubectl apply --validate=true --dry-run=true  -f .\hello-cicd\gke\
+    gcloud container clusters create-auto hello-cicd-gke --region us-west1
 
-    kubectl apply --validate=true -f .\hello-cicd\gke\
+    kubectl apply --validate=true --dry-run=true -f .\gke\
+
+    kubectl apply --validate=true -f .\gke\
     ```
+
 ## Reference
-https://circleci.com/blog/simplifying-your-ci-cd-build-pipeline-to-gke-with-circleci-orbs/
+
+[Simplifying your CI/CD build pipeline to GKE with CircleCI orbs](https://circleci.com/blog/simplifying-your-ci-cd-build-pipeline-to-gke-with-circleci-orbs/)
+
