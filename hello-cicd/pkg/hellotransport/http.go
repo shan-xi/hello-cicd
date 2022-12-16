@@ -15,8 +15,6 @@ import (
 
 	"golang.org/x/time/rate"
 
-	// stdopentracing "github.com/opentracing/opentracing-go"
-	// stdzipkin "github.com/openzipkin/zipkin-go"
 	"github.com/sony/gobreaker"
 
 	"github.com/go-kit/kit/circuitbreaker"
@@ -27,8 +25,6 @@ import (
 	"github.com/go-kit/log"
 )
 
-// func NewHTTPHandler(endpoints helloendpoint.Set, otTracer stdopentracing.Tracer, zipkinTracer *stdzipkin.Tracer, logger log.Logger) http.Handler {
-
 // NewHTTPHandler returns an HTTP handler that makes a set of endpoints
 // available on predefined paths.
 func NewHTTPHandler(endpoints helloendpoint.Set, logger log.Logger) http.Handler {
@@ -37,17 +33,12 @@ func NewHTTPHandler(endpoints helloendpoint.Set, logger log.Logger) http.Handler
 		httptransport.ServerErrorHandler(transport.NewLogErrorHandler(logger)),
 	}
 
-	// if zipkinTracer != nil {
-	// 	options = append(options, zipkin.HTTPServerTrace(zipkinTracer))
-	// }
-
 	m := http.NewServeMux()
 	m.Handle("/sayHello", httptransport.NewServer(
 		endpoints.SayHelloEndpoint,
 		decodeHTTPSayHelloRequest,
 		encodeHTTPGenericResponse,
 		options...,
-	// append(options, httptransport.ServerBefore(opentracing.HTTPToContext(otTracer, "SayHello", logger)))...,
 	))
 	return m
 }
@@ -57,6 +48,7 @@ func NewHTTPHandler(endpoints helloendpoint.Set, logger log.Logger) http.Handler
 // so likely of the form "host:port". We bake-in certain middlewares,
 // implementing the client library pattern.
 func NewHTTPClient(instance string, logger log.Logger) (helloservice.Service, error) {
+
 	// Quickly sanitize the instance string
 	if !strings.HasPrefix(instance, "http") {
 		instance = "http://" + instance

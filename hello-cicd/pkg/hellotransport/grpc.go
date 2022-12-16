@@ -10,8 +10,6 @@ import (
 
 	"google.golang.org/grpc"
 
-	// stdopentracing "github.com/opentracing/opentracing-go"
-	// stdzipkin "github.com/openzipkin/zipkin-go"
 	"github.com/sony/gobreaker"
 	"golang.org/x/time/rate"
 
@@ -19,8 +17,6 @@ import (
 	"github.com/go-kit/kit/endpoint"
 	"github.com/go-kit/kit/ratelimit"
 
-	// "github.com/go-kit/kit/tracing/opentracing"
-	// "github.com/go-kit/kit/tracing/zipkin"
 	"github.com/go-kit/kit/transport"
 	grpctransport "github.com/go-kit/kit/transport/grpc"
 	"github.com/go-kit/log"
@@ -30,17 +26,11 @@ type grpcServer struct {
 	sayHello grpctransport.Handler
 }
 
-// func NewGRPCServer(endpoints helloendpoint.Set, otTracer stdopentracing.Tracer, zipkinTracer *stdzipkin.Tracer, logger log.Logger) pb.HelloServer {
-
 // NewGRPCServer makes a set of endpoints available as a gRPC AddServer.
 func NewGRPCServer(endpoints helloendpoint.Set, logger log.Logger) pb.HelloServer {
 	options := []grpctransport.ServerOption{
 		grpctransport.ServerErrorHandler(transport.NewLogErrorHandler(logger)),
 	}
-
-	// if zipkinTracer != nil {
-	// 	options = append(options, zipkin.GRPCServerTrace(zipkinTracer))
-	// }
 
 	return &grpcServer{
 		sayHello: grpctransport.NewServer(
@@ -65,6 +55,7 @@ func (s *grpcServer) SayHello(ctx context.Context, req *pb.SayHelloRequest) (*pb
 // eventually closing the underlying transport. We bake-in certain middlewares,
 // implementing the client library pattern.
 func NewGRPCClient(conn *grpc.ClientConn, logger log.Logger) helloservice.Service {
+
 	// We construct a single ratelimiter middleware, to limit the total outgoing
 	// QPS from this client to all methods on the remote instance. We also
 	// construct per-endpoint circuitbreaker middlewares to demonstrate how
