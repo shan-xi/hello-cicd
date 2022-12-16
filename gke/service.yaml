@@ -7,6 +7,9 @@ spec:
   selector:
     app: hello-app
   ports:
+  - port: 8080
+    name: metrics
+    targetPort: 8080
   - port: 8081
     name: http
     targetPort: 8081

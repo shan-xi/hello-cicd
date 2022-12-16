@@ -28,10 +28,10 @@ jobs:
       - gcr/build-image:
           path: .
           image: hello-cicd-gke
-          tag: "v3"
+          tag: "v4"
       - gcr/push-image:
           image: hello-cicd-gke
-          tag: "v3"
+          tag: "v4"
     
   deploy:
     description: Deploy application to Google Kubernetes Engine
@@ -53,7 +53,7 @@ jobs:
           deployment: hello-cicd-gke-deployment
           container: hello-app
           image: gcr.io/go-microservice-370513/hello-cicd-gke 
-          tag: "v3"
+          tag: "v4"
 workflows:
   build_update_deploy:
     jobs:

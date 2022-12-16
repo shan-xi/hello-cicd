@@ -1,5 +1,13 @@
-## hello-cicd
-    About simple project to show:
+# hello-cicd
+
+## Demo
+
+    1. Using go-kit to build a service with HTTP and gRPC transport.
+    2. Integrated with gihub, Circleci and GKE to show a basic CICD flow
+    3. Deploy a loadBalancer type go service on GKE.
+
+## Below is command records
+
     1. Deploy gokit to GKE with CICD 
 
     - docker command - build golang app
